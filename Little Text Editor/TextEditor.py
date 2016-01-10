@@ -12,9 +12,12 @@ def newFile():
 def saveFile():
 	global filename
 	t = text.get(0.0, END) # first # is 0th line, number on right is column number)
-	f = open(filename, 'w')
-	f.write(t)
-	f.close()
+	try:
+		f = open(filename, 'w')
+		f.write(t)
+		f.close()
+	except TypeError:
+		saveAs()
 
 def saveAs():
 	f = filedialog.asksaveasfile(mode='w', defaultextension='.txt')
