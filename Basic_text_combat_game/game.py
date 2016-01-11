@@ -6,13 +6,8 @@ from monster import Dragon
 from monster import Goblin
 from monster import Troll
 
-LINE = """####################
 
-####################"""
 
-def clear():
-	"""Calls cls if on windows, or clear on mac or linux."""
-	os.system('cls' if os.name == 'nt' else 'clear')
 
 class Game(object):
 	
@@ -33,6 +28,17 @@ class Game(object):
 		self.monster = self.get_next_monster()
 		print("An angry {} {} steps forward!".format(self.monster.color.title(),
 													self.monster.__class__.__name__))
+
+	def clear(self):
+		"""Calls cls if on windows, or clear on mac or linux."""
+		os.system('cls' if os.name == 'nt' else 'clear')
+		try:
+			if self.player:
+				print(self.player)
+				print('='*20)
+		except AttributeError:
+			pass
+
 	def get_next_monster(self):
 		try:
 			return self.monsters.pop(0)
@@ -45,16 +51,18 @@ class Game(object):
 			print("The {} {} prepares its attack!".format(self.monster.color.title(), 
 														self.monster.__class__.__name__))
 			if input("Dodge? Y/N \n>").lower() == 'y':
-				print(LINE)
+				self.clear()
 				if self.player.dodge():
 					print("Success!!!")
 					print("{} dodges the {}.".format(self.player.name, self.monster.__class__.__name__))
 				else:
 					self.player.hit_points -= self.monster.damage
 					print("Dodge fails.")
-					print("{} gets hit for {} health".format(self.player.name, self.monster.damage))
+					print("{} gets hit for {} health. Remaining health: {}.".format(self.player.name,
+																			self.monster.damage,
+																			self.player.hit_points))
 			elif input("Counter-attack? Y/N\n> ").lower() == 'y':
-				print(LINE)
+				self.clear()
 				if self.player.counter_attack():
 					self.monster.hit_points -= (self.player.lvl*2)
 					print("{} pulls of a mighty counter-attack on the {} {} dealing {} damage!".format(
@@ -66,7 +74,9 @@ class Game(object):
 				else:
 					self.player.hit_points -= (self.monster.damage*2)
 					print("Counter attack fails and you get hit for double!")
-					print("{} lose {} hp.".format(self.player.name, (self.monster.damage*2)))
+					print("{} lose {} hp. Remaining health: {}.".format(self.player.name,
+																(self.monster.damage*2),
+																self.player.hit_points))
 			else:
 				self.player.hit_points -= self.monster.damage
 				print("You get hit for {} health where you stand!".format(self.monster.damage))
@@ -78,9 +88,8 @@ class Game(object):
 		# let player attack, rest, quit
 		options = ['attack', 'rest', 'quit', "a", "r", "q"]
 		user = input("[A]ttack, [R]est, [Q]uit? ").lower()
-		clear()
+		self.clear()
 		if user in options:
-			print(LINE)
 			if user == "attack" or user == "a":
 				if self.player.attack():
 					if self.monster.dodge():
@@ -103,7 +112,6 @@ class Game(object):
 				print("Hope to play again sometime {}!".format(self.player.name))
 				sys.exit()
 		else:
-			print(LINE)
 			print("Type 'attack' or 'rest' or 'quit' or the first letter please.")
 			self.player_turn()
 
@@ -133,12 +141,11 @@ class Game(object):
 	
 
 	def __init__(self):
-		clear()
+		self.clear()
 		self.setup()
-		clear()
+		self.clear()
 		print("{} monsters prepare to battle you!".format(len(self.monsters)))
 		while (self.player.hit_points > 0) and (self.monster or self.monsters):
-			print(self.player)
 			self.monster_turn()
 			if self.monster.hit_points > 0 or self.player.hit_points <= 0:
 				self.player_turn()
@@ -157,6 +164,6 @@ class Game(object):
 			print("You drew!")
 		
 		exit_input = input("Thank you for playing!\n Press enter to quit!")
-		clear()
+		self.clear()
 		sys.exit()
 
