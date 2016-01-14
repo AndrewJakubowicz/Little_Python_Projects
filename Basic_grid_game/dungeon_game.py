@@ -18,11 +18,11 @@ def print_line(s):
 	wait_time = 0.2
 	string_list = s.split()
 	for word in string_list:
-		print word,
+		print(word,)
 		time.sleep(wait_time)
 		if wait_time > 0.1:
 			wait_time = wait_time * 0.8
-	print "\n"
+	print("\n")
 
 def instruction():
 	"""Prints instructions onto the screen."""
@@ -30,7 +30,7 @@ def instruction():
 	print_line("Type your move like this: LEFT")
 	print_line("You are the P on the map")
 	print_line("Win by finding the exit door!")
-	print "\n"
+	print("\n")
 	print_line("Turn on cheats with CHEAT")
 	print_line("M = monster")
 	print_line("D = exit door")
@@ -81,15 +81,15 @@ print_line("Type HELP for instructions")
 while True:
 	moves = get_moves(player)
 	mini_map[str(player)] = "P"
-	print """Map\n{(0, 0)} {(1, 0)} {(2, 0)}
+	print("""Map\n{(0, 0)} {(1, 0)} {(2, 0)}
 {(0, 1)} {(1, 1)} {(2, 1)}
 {(0, 2)} {(1, 2)} {(2, 2)}
-""".format(**mini_map)
+""".format(**mini_map))
 	mini_map[str(player)] = "."
 
-	print "You can move {}.".format(moves)
+	print("You can move {}.".format(moves))
 
-	move = raw_input("> ")
+	move = input("> ")
 	move = move.upper()
 
 	if move == 'QUIT':
@@ -105,13 +105,13 @@ while True:
 	if move in moves:
 		player = move_player(player, move)
 	else:
-		print "** Stop walking into walls **"
+		print("** Stop walking into walls **")
 		continue
 
 	if player == door:
-		print "YOU WIN"
+		print("YOU WIN")
 		break
 
 	if player == monster:
-		print "YOU LOSE"
+		print("YOU LOSE")
 		break
